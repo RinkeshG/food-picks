@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Caveat:wght@500&family=DM+Sans:wght@400;500;600&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      width: 1200px;
+      height: 630px;
+      background: #FFFBF5;
+      font-family: 'DM Sans', sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(#E7E5E4 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.5;
+    }
+    
+    .emoji-bg {
+      position: absolute;
+      font-size: 48px;
+      opacity: 0.12;
+    }
+    
+    .card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1000px;
+      background: white;
+      border-radius: 24px;
+      padding: 48px 56px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    }
+    
+    .title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 64px;
+      font-weight: 600;
+      color: #1C1917;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .title .emoji {
+      font-size: 56px;
+    }
+    
+    .subtitle {
+      font-family: 'Caveat', cursive;
+      font-size: 32px;
+      color: #78716C;
+      margin-bottom: 32px;
+    }
+    
+    .divider {
+      width: 200px;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, #E7E5E4 0, #E7E5E4 8px, transparent 8px, transparent 16px);
+      margin-bottom: 32px;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    
+    .stamp {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 2px solid;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .stamp.orange { border-color: #B45309; color: #B45309; }
+    .stamp.red { border-color: #DC2626; color: #DC2626; }
+    .stamp.pink { border-color: #DB2777; color: #DB2777; }
+    
+    .description {
+      font-size: 20px;
+      color: #57534E;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .author {
+      font-family: 'Caveat', cursive;
+      font-size: 24px;
+      color: #A8A29E;
+    }
+  </style>
+</head>
+<body>
+  <div class="dots"></div>
+  
+  <!-- Scattered emojis -->
+  <span class="emoji-bg" style="top: 60px; left: 60px; font-size: 56px;">🍜</span>
+  <span class="emoji-bg" style="top: 80px; right: 100px; font-size: 44px;">🥘</span>
+  <span class="emoji-bg" style="bottom: 60px; left: 120px; font-size: 40px;">☕</span>
+  <span class="emoji-bg" style="bottom: 80px; right: 80px; font-size: 48px;">🍚</span>
+  <span class="emoji-bg" style="top: 200px; right: 60px; font-size: 36px;">⭐</span>
+  <span class="emoji-bg" style="top: 180px; left: 180px; font-size: 32px;">💕</span>
+  
+  <div class="card">
+    <h1 class="title">
+      Places I'd take you <span class="emoji">🍜</span>
+    </h1>
+    <p class="subtitle">if we were grabbing food in Bangalore</p>
+    
+    <div class="divider"></div>
+    
+    <div class="stats">
+      <span class="stamp orange">📍 12 spots</span>
+      <span class="stamp red">⭐ 6 must-try</span>
+      <span class="stamp pink">💕 date-tested</span>
+    </div>
+    
+    <div class="description">
+      <span>Not sponsored. Just honest picks from someone who eats everywhere.</span>
+      <span class="author">— Rinkesh</span>
+    </div>
+  </div>
+</body>
+</html>

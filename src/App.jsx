@@ -147,6 +147,20 @@ export default function App() {
   const [activeCuisine, setActiveCuisine] = useState('all');
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [hoveredStamp, setHoveredStamp] = useState(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Show scroll-to-top button after scrolling
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 500);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const filteredSpots = useMemo(() => {
     if (activeCuisine === 'all') return foodSpots;
@@ -171,7 +185,15 @@ export default function App() {
         
         ::selection { background: #FFE0B2; }
         
-        html { -webkit-text-size-adjust: 100%; }
+        html { 
+          -webkit-text-size-adjust: 100%; 
+          scroll-behavior: smooth;
+        }
+        
+        /* Smooth filter transitions */
+        .grid-item {
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
         
         .card {
           transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -470,106 +492,73 @@ export default function App() {
           {' '}— building things, eating everywhere 🍜
         </p>
 
-        {/* Stats with hover easter eggs */}
+        {/* Stats with hover/tap easter eggs */}
         <div className="fade-up" style={{ 
           display: 'flex', 
-          flexWrap: 'wrap',
-          alignItems: 'flex-start',
+          flexDirection: 'column',
           gap: 10,
-          marginBottom: hoveredStamp ? 8 : 24,
+          marginBottom: 24,
           animationDelay: '0.1s',
-          transition: 'margin-bottom 0.2s ease',
         }}>
-          {/* Spots count */}
-          <div style={{ position: 'relative', display: 'inline-block' }}>
+          {/* Chips row */}
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 10,
+          }}>
+            {/* Spots count */}
             <span 
               className="stamp" 
               style={{ color: '#B45309', cursor: 'pointer' }}
+              onClick={() => setHoveredStamp(hoveredStamp === 'spots' ? null : 'spots')}
               onMouseEnter={() => setHoveredStamp('spots')}
               onMouseLeave={() => setHoveredStamp(null)}
             >
               <span>📍</span> {foodSpots.length} spots
             </span>
-            {hoveredStamp === 'spots' && (
-              <p 
-                className="handwritten fade-in"
-                style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 6px)',
-                  left: 0,
-                  fontSize: 20,
-                  color: '#B45309',
-                  whiteSpace: 'nowrap',
-                  zIndex: 10,
-                }}
-              >
-                and counting... always hungry 🤤
-              </p>
-            )}
-          </div>
 
-          {/* Must-try count */}
-          <div style={{ position: 'relative', display: 'inline-block' }}>
+            {/* Must-try count */}
             <span 
               className="stamp" 
               style={{ color: '#DC2626', cursor: 'pointer' }}
+              onClick={() => setHoveredStamp(hoveredStamp === 'fav' ? null : 'fav')}
               onMouseEnter={() => setHoveredStamp('fav')}
               onMouseLeave={() => setHoveredStamp(null)}
             >
               <span>⭐</span> {favCount} must-try
             </span>
-            {hoveredStamp === 'fav' && (
-              <p 
-                className="handwritten fade-in"
-                style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 6px)',
-                  left: 0,
-                  fontSize: 20,
-                  color: '#DC2626',
-                  whiteSpace: 'nowrap',
-                  zIndex: 10,
-                }}
-              >
-                the ones I'd fight for ⚔️
-              </p>
-            )}
-          </div>
-          
-          {/* Date spot stamp */}
-          <div style={{ position: 'relative', display: 'inline-block' }}>
+            
+            {/* Date spot stamp */}
             <span 
               className="stamp" 
               style={{ color: '#DB2777', cursor: 'pointer' }}
+              onClick={() => setHoveredStamp(hoveredStamp === 'date' ? null : 'date')}
               onMouseEnter={() => setHoveredStamp('date')}
               onMouseLeave={() => setHoveredStamp(null)}
             >
               <span>💕</span> {dateSpotCount} date-tested
             </span>
+          </div>
+
+          {/* Easter egg text - appears below all chips */}
+          <div style={{ minHeight: 28 }}>
+            {hoveredStamp === 'spots' && (
+              <p className="handwritten fade-in" style={{ fontSize: 20, color: '#B45309' }}>
+                and counting... always hungry 🤤
+              </p>
+            )}
+            {hoveredStamp === 'fav' && (
+              <p className="handwritten fade-in" style={{ fontSize: 20, color: '#DC2626' }}>
+                the ones I'd fight for ⚔️
+              </p>
+            )}
             {hoveredStamp === 'date' && (
-              <p 
-                className="handwritten fade-in"
-                style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 6px)',
-                  left: 0,
-                  fontSize: 20,
-                  color: '#DB2777',
-                  whiteSpace: 'nowrap',
-                  zIndex: 10,
-                }}
-              >
+              <p className="handwritten fade-in" style={{ fontSize: 20, color: '#DB2777' }}>
                 momo & burrito approved 💕
               </p>
             )}
           </div>
         </div>
-
-        {/* Spacer that only appears on hover */}
-        <div style={{ 
-          height: hoveredStamp ? 32 : 0, 
-          transition: 'height 0.2s ease',
-        }} />
 
         {/* Intro */}
         <div className="fade-up" style={{ 
@@ -636,12 +625,18 @@ export default function App() {
             <article
               key={spot.id}
               className="card fade-up"
+              onClick={() => {
+                // Open Google Maps search for the restaurant
+                const query = encodeURIComponent(`${spot.name} ${spot.area} Bangalore`);
+                window.open(`https://www.google.com/maps/search/${query}`, '_blank');
+              }}
               style={{
                 backgroundColor: '#fff',
                 borderRadius: 16,
                 boxShadow: '0 4px 20px -4px rgba(0,0,0,0.08)',
                 animationDelay: `${0.15 + index * 0.06}s`,
                 overflow: 'visible',
+                cursor: 'pointer',
               }}
             >
               {/* Image container */}
@@ -791,6 +786,23 @@ export default function App() {
                 }}>
                   {spot.note}
                 </p>
+                
+                {/* Click hint */}
+                <p style={{
+                  marginTop: 12,
+                  fontSize: 11,
+                  color: '#A8A29E',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                  tap to find on maps
+                </p>
               </div>
             </article>
           ))}
@@ -824,7 +836,7 @@ export default function App() {
           }}>
             Got a spot I should try?
           </p>
-          <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: '#A8A29E' }}>
+          <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: '#A8A29E', marginBottom: 20 }}>
             DM me on{' '}
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={{ 
               color: '#1C1917', 
@@ -835,6 +847,54 @@ export default function App() {
             </a>
           </p>
           
+          {/* Share button */}
+          <button
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({
+                  title: "Places I'd take you 🍜",
+                  text: "Check out this Bangalore food guide — honest picks, no sponsors.",
+                  url: window.location.href,
+                });
+              } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+              }
+            }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '10px 20px',
+              background: '#1C1917',
+              color: '#FFFBF5',
+              border: 'none',
+              borderRadius: 100,
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="18" cy="5" r="3"/>
+              <circle cx="6" cy="12" r="3"/>
+              <circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+            Share this list
+          </button>
+          
           <p style={{
             marginTop: 24,
             fontSize: 11,
@@ -844,6 +904,38 @@ export default function App() {
           </p>
         </div>
       </footer>
+      {/* Scroll to top button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          style={{
+            position: 'fixed',
+            bottom: 24,
+            right: 24,
+            width: 48,
+            height: 48,
+            borderRadius: '50%',
+            background: '#1C1917',
+            color: '#FFFBF5',
+            border: 'none',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+            zIndex: 50,
+            transition: 'transform 0.2s ease, opacity 0.2s ease',
+            animation: 'fadeIn 0.2s ease',
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          aria-label="Scroll to top"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="18 15 12 9 6 15"/>
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
