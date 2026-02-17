@@ -410,48 +410,65 @@ export default function App() {
           </p>
         </div>
 
-        {/* Personal intro */}
-        <div className="fade-up" style={{ 
-          display: 'flex',
-          alignItems: 'center',
-          gap: 14,
-          marginBottom: 28,
+        {/* Personal intro - subtle, inline with the vibe */}
+        <p className="fade-up" style={{ 
+          fontSize: 'clamp(14px, 3.5vw, 15px)',
+          color: '#A8A29E',
+          marginBottom: 20,
           animationDelay: '0.08s',
         }}>
-          <div style={{
-            width: 52,
-            height: 52,
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #1C1917 0%, #57534E 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FFFBF5',
-            fontSize: 20,
-            fontWeight: 600,
-            flexShrink: 0,
-          }}>
-            R
-          </div>
-          <div>
-            <p style={{
-              fontSize: 15,
-              fontWeight: 600,
+          curated by{' '}
+          <span 
+            style={{ 
+              position: 'relative',
+              display: 'inline-block',
+            }}
+            onMouseEnter={(e) => {
+              const tooltip = e.currentTarget.querySelector('.name-tooltip');
+              if (tooltip) tooltip.style.opacity = '1';
+            }}
+            onMouseLeave={(e) => {
+              const tooltip = e.currentTarget.querySelector('.name-tooltip');
+              if (tooltip) tooltip.style.opacity = '0';
+            }}
+          >
+            <span className="handwritten" style={{ 
+              fontSize: 'clamp(18px, 4.5vw, 22px)',
               color: '#1C1917',
-              marginBottom: 2,
+              cursor: 'default',
             }}>
               Rinkesh
-            </p>
-            <p style={{
-              fontSize: 13,
-              color: '#78716C',
-              lineHeight: 1.4,
-            }}>
-              Building things, eating everywhere.<br/>
-              Based in Bangalore with my cat Simba.
-            </p>
-          </div>
-        </div>
+            </span>
+            {/* Hover photo tooltip */}
+            <span 
+              className="name-tooltip"
+              style={{
+                position: 'absolute',
+                bottom: 'calc(100% + 8px)',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                opacity: 0,
+                transition: 'opacity 0.2s ease',
+                pointerEvents: 'none',
+                zIndex: 50,
+              }}
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+                alt="Rinkesh"
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  border: '3px solid #FFFBF5',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  objectFit: 'cover',
+                }}
+              />
+            </span>
+          </span>
+          {' '}— building things, eating everywhere 🍜
+        </p>
 
         {/* Stats with hover easter eggs */}
         <div className="fade-up" style={{ 
