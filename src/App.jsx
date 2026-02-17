@@ -9,7 +9,7 @@ const foodSpots = [
     cuisine: 'south-indian',
     what: 'Masala Dosa',
     note: 'Go at 7am or suffer. The dosa has this insane crispy edge that haunts your dreams. Skip weekends unless you enjoy standing in the sun questioning life choices.',
-    image: 'https://images.unsplash.com/photo-1668236543090-82eb5eace6d2?w=600&h=400&fit=crop',
+    image: 'https://images.unsplash.com/photo-1630383249896-424e482df921?w=600&h=400&fit=crop',
     isFavorite: true,
     isDateSpot: true,
   },
@@ -21,7 +21,7 @@ const foodSpots = [
     cuisine: 'south-indian',
     what: 'Benne Dosa',
     note: 'The amount of butter they use should be illegal. Your diet can wait. Your arteries can handle it. Probably. Maybe.',
-    image: 'https://images.unsplash.com/photo-1630383249896-424e482df921?w=600&h=400&fit=crop',
+    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&h=400&fit=crop',
     isDateSpot: true,
   },
   {
@@ -54,7 +54,7 @@ const foodSpots = [
     cuisine: 'south-indian',
     what: 'Idli Vada + Filter Coffee',
     note: 'Standing and eating off steel plates. No AC. No pretense. Just perfect idlis with the most aggressive chutney. This is Bangalore.',
-    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&h=400&fit=crop',
+    image: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=600&h=400&fit=crop',
     isFavorite: true,
   },
   {
@@ -143,47 +143,10 @@ const cuisineFilters = [
   { id: 'drinks', label: 'Drinks', emoji: '🍺' },
 ];
 
-const Tooltip = ({ children, text, visible }) => (
-  <div style={{ position: 'relative', display: 'inline-flex' }}>
-    {children}
-    {visible && (
-      <div style={{
-        position: 'absolute',
-        bottom: 'calc(100% + 10px)',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        padding: '10px 14px',
-        background: '#1C1917',
-        color: '#FFFBF5',
-        fontSize: 13,
-        fontWeight: 500,
-        borderRadius: 10,
-        whiteSpace: 'nowrap',
-        zIndex: 9999,
-        boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
-        pointerEvents: 'none',
-      }}>
-        {text}
-        <div style={{
-          position: 'absolute',
-          top: '100%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 0,
-          height: 0,
-          borderLeft: '8px solid transparent',
-          borderRight: '8px solid transparent',
-          borderTop: '8px solid #1C1917',
-        }} />
-      </div>
-    )}
-  </div>
-);
-
 export default function App() {
   const [activeCuisine, setActiveCuisine] = useState('all');
-  const [easterEggClicks, setEasterEggClicks] = useState(0);
   const [activeTooltip, setActiveTooltip] = useState(null);
+  const [dateSpotHovered, setDateSpotHovered] = useState(false);
 
   const filteredSpots = useMemo(() => {
     if (activeCuisine === 'all') return foodSpots;
@@ -192,13 +155,6 @@ export default function App() {
 
   const favCount = foodSpots.filter(s => s.isFavorite).length;
   const dateSpotCount = foodSpots.filter(s => s.isDateSpot).length;
-
-  const handleTooltipEnter = (id) => setActiveTooltip(id);
-  const handleTooltipLeave = () => setActiveTooltip(null);
-  const handleTooltipTouch = (id) => {
-    setActiveTooltip(id);
-    setTimeout(() => setActiveTooltip(null), 2000);
-  };
 
   return (
     <div style={{
@@ -219,6 +175,7 @@ export default function App() {
         
         .card {
           transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          position: relative;
         }
         @media (hover: hover) {
           .card:hover {
@@ -249,6 +206,14 @@ export default function App() {
           animation: fadeUp 0.5s ease-out forwards; 
         }
         
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-4px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+          animation: fadeIn 0.2s ease-out forwards;
+        }
+        
         .handwritten {
           font-family: 'Caveat', cursive;
         }
@@ -269,6 +234,8 @@ export default function App() {
           text-transform: uppercase;
           letter-spacing: 0.5px;
           background: #FFFBF5;
+          cursor: default;
+          position: relative;
         }
         
         .filter-btn {
@@ -294,18 +261,20 @@ export default function App() {
         .badge {
           background: #fff;
           border-radius: 50px;
-          width: 40px;
-          height: 40px;
+          width: 36px;
+          height: 36px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 16px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          font-size: 14px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.12);
           cursor: pointer;
           transition: transform 0.2s ease;
         }
-        .badge:hover {
-          transform: scale(1.1);
+        @media (hover: hover) {
+          .badge:hover {
+            transform: scale(1.1);
+          }
         }
         
         .badge-pink {
@@ -355,9 +324,10 @@ export default function App() {
         
         .img-container {
           height: 200px;
-          overflow: hidden;
           position: relative;
           background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%);
+          border-radius: 16px 16px 0 0;
+          overflow: hidden;
         }
         @media (min-width: 540px) {
           .img-container {
@@ -391,12 +361,15 @@ export default function App() {
           </p>
         </div>
 
+        {/* Stats with hover easter egg */}
         <div className="fade-up" style={{ 
           display: 'flex', 
           flexWrap: 'wrap',
+          alignItems: 'flex-start',
           gap: 10,
           marginBottom: 24,
           animationDelay: '0.1s',
+          minHeight: 70,
         }}>
           <span className="stamp" style={{ color: '#B45309' }}>
             <span>📍</span> {foodSpots.length} spots
@@ -404,25 +377,39 @@ export default function App() {
           <span className="stamp" style={{ color: '#DC2626' }}>
             <span>⭐</span> {favCount} must-try
           </span>
-          <span 
-            className="stamp" 
-            style={{ color: '#DB2777', cursor: 'pointer' }}
-            onClick={() => setEasterEggClicks(e => e + 1)}
-          >
-            <span>🥟🌯</span> {dateSpotCount} date-tested
-          </span>
+          
+          {/* Date spot stamp with hover easter egg */}
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <span 
+              className="stamp" 
+              style={{ color: '#DB2777', cursor: 'pointer' }}
+              onMouseEnter={() => setDateSpotHovered(true)}
+              onMouseLeave={() => setDateSpotHovered(false)}
+            >
+              <span>🥟🌯</span> {dateSpotCount} date-tested
+            </span>
+            
+            {/* Easter egg - handwritten style, appears on hover */}
+            {dateSpotHovered && (
+              <p 
+                className="handwritten fade-in"
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 6px)',
+                  left: 0,
+                  fontSize: 20,
+                  color: '#DB2777',
+                  whiteSpace: 'nowrap',
+                  zIndex: 10,
+                }}
+              >
+                psst... momo & burrito approved 💕
+              </p>
+            )}
+          </div>
         </div>
 
-        {easterEggClicks >= 3 && (
-          <p className="handwritten fade-up" style={{
-            fontSize: 20,
-            color: '#DB2777',
-            marginBottom: 20,
-          }}>
-            yep, momo & burrito have tried all of these together ❤️
-          </p>
-        )}
-
+        {/* Intro */}
         <div className="fade-up" style={{ 
           maxWidth: 540, 
           animationDelay: '0.15s',
@@ -490,11 +477,12 @@ export default function App() {
               style={{
                 backgroundColor: '#fff',
                 borderRadius: 16,
-                overflow: 'hidden',
                 boxShadow: '0 4px 20px -4px rgba(0,0,0,0.08)',
                 animationDelay: `${0.15 + index * 0.06}s`,
+                overflow: 'visible',
               }}
             >
+              {/* Image container */}
               <div className="img-container">
                 <img
                   src={spot.image}
@@ -507,47 +495,84 @@ export default function App() {
                     objectFit: 'cover',
                   }}
                 />
+              </div>
+              
+              {/* Badges - positioned outside img-container for overflow */}
+              <div style={{
+                position: 'absolute',
+                top: 12,
+                right: 12,
+                display: 'flex',
+                gap: 8,
+                zIndex: 20,
+              }}>
+                {spot.isFavorite && (
+                  <div style={{ position: 'relative' }}>
+                    <div 
+                      className="badge"
+                      onMouseEnter={() => setActiveTooltip(`fav-${spot.id}`)}
+                      onMouseLeave={() => setActiveTooltip(null)}
+                    >
+                      ⭐
+                    </div>
+                    {activeTooltip === `fav-${spot.id}` && (
+                      <p 
+                        className="handwritten fade-in"
+                        style={{
+                          position: 'absolute',
+                          top: 'calc(100% + 8px)',
+                          right: 0,
+                          fontSize: 18,
+                          color: '#DC2626',
+                          whiteSpace: 'nowrap',
+                          zIndex: 100,
+                          background: '#FFFBF5',
+                          padding: '6px 12px',
+                          borderRadius: 8,
+                          border: '2px dashed #FCA5A5',
+                          transform: 'rotate(-1deg)',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                        }}
+                      >
+                        one of my absolute favorites!
+                      </p>
+                    )}
+                  </div>
+                )}
                 
-                <div style={{
-                  position: 'absolute',
-                  top: 12,
-                  right: 12,
-                  display: 'flex',
-                  gap: 8,
-                  zIndex: 10,
-                }}>
-                  {spot.isFavorite && (
-                    <Tooltip 
-                      text="one of my absolute favorites" 
-                      visible={activeTooltip === `fav-${spot.id}`}
+                {spot.isDateSpot && (
+                  <div style={{ position: 'relative' }}>
+                    <div 
+                      className="badge badge-pink"
+                      onMouseEnter={() => setActiveTooltip(`date-${spot.id}`)}
+                      onMouseLeave={() => setActiveTooltip(null)}
                     >
-                      <div 
-                        className="badge"
-                        onMouseEnter={() => handleTooltipEnter(`fav-${spot.id}`)}
-                        onMouseLeave={handleTooltipLeave}
-                        onTouchStart={() => handleTooltipTouch(`fav-${spot.id}`)}
+                      🥟🌯
+                    </div>
+                    {activeTooltip === `date-${spot.id}` && (
+                      <p 
+                        className="handwritten fade-in"
+                        style={{
+                          position: 'absolute',
+                          top: 'calc(100% + 8px)',
+                          right: 0,
+                          fontSize: 18,
+                          color: '#DB2777',
+                          whiteSpace: 'nowrap',
+                          zIndex: 100,
+                          background: '#FDF2F8',
+                          padding: '6px 12px',
+                          borderRadius: 8,
+                          border: '2px dashed #F9A8D4',
+                          transform: 'rotate(1deg)',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                        }}
                       >
-                        ⭐
-                      </div>
-                    </Tooltip>
-                  )}
-                  
-                  {spot.isDateSpot && (
-                    <Tooltip 
-                      text="momo + burrito approved 💕" 
-                      visible={activeTooltip === `date-${spot.id}`}
-                    >
-                      <div 
-                        className="badge badge-pink"
-                        onMouseEnter={() => handleTooltipEnter(`date-${spot.id}`)}
-                        onMouseLeave={handleTooltipLeave}
-                        onTouchStart={() => handleTooltipTouch(`date-${spot.id}`)}
-                      >
-                        🥟🌯
-                      </div>
-                    </Tooltip>
-                  )}
-                </div>
+                        momo + burrito approved 💕
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div style={{ padding: 20 }}>
