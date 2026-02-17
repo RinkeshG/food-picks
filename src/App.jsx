@@ -146,7 +146,7 @@ const cuisineFilters = [
 export default function App() {
   const [activeCuisine, setActiveCuisine] = useState('all');
   const [activeTooltip, setActiveTooltip] = useState(null);
-  const [dateSpotHovered, setDateSpotHovered] = useState(false);
+  const [hoveredStamp, setHoveredStamp] = useState(null);
 
   const filteredSpots = useMemo(() => {
     if (activeCuisine === 'all') return foodSpots;
@@ -259,15 +259,17 @@ export default function App() {
         }
         
         .badge {
-          background: #fff;
+          background: rgba(0,0,0,0.65);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           border-radius: 50px;
-          width: 36px;
-          height: 36px;
+          width: 40px;
+          height: 40px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 14px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+          font-size: 16px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
           cursor: pointer;
           transition: transform 0.2s ease;
         }
@@ -277,8 +279,10 @@ export default function App() {
           }
         }
         
-        .badge-pink {
-          background: #FDF2F8;
+        .badge-date {
+          background: rgba(219, 39, 119, 0.85);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
         }
         
         .grid {
@@ -361,7 +365,7 @@ export default function App() {
           </p>
         </div>
 
-        {/* Stats with hover easter egg */}
+        {/* Stats with hover easter eggs */}
         <div className="fade-up" style={{ 
           display: 'flex', 
           flexWrap: 'wrap',
@@ -371,26 +375,73 @@ export default function App() {
           animationDelay: '0.1s',
           minHeight: 70,
         }}>
-          <span className="stamp" style={{ color: '#B45309' }}>
-            <span>📍</span> {foodSpots.length} spots
-          </span>
-          <span className="stamp" style={{ color: '#DC2626' }}>
-            <span>⭐</span> {favCount} must-try
-          </span>
+          {/* Spots count */}
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <span 
+              className="stamp" 
+              style={{ color: '#B45309', cursor: 'pointer' }}
+              onMouseEnter={() => setHoveredStamp('spots')}
+              onMouseLeave={() => setHoveredStamp(null)}
+            >
+              <span>📍</span> {foodSpots.length} spots
+            </span>
+            {hoveredStamp === 'spots' && (
+              <p 
+                className="handwritten fade-in"
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 6px)',
+                  left: 0,
+                  fontSize: 20,
+                  color: '#B45309',
+                  whiteSpace: 'nowrap',
+                  zIndex: 10,
+                }}
+              >
+                and counting... always hungry 🤤
+              </p>
+            )}
+          </div>
+
+          {/* Must-try count */}
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <span 
+              className="stamp" 
+              style={{ color: '#DC2626', cursor: 'pointer' }}
+              onMouseEnter={() => setHoveredStamp('fav')}
+              onMouseLeave={() => setHoveredStamp(null)}
+            >
+              <span>⭐</span> {favCount} must-try
+            </span>
+            {hoveredStamp === 'fav' && (
+              <p 
+                className="handwritten fade-in"
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 6px)',
+                  left: 0,
+                  fontSize: 20,
+                  color: '#DC2626',
+                  whiteSpace: 'nowrap',
+                  zIndex: 10,
+                }}
+              >
+                the ones I'd fight for ⚔️
+              </p>
+            )}
+          </div>
           
-          {/* Date spot stamp with hover easter egg */}
+          {/* Date spot stamp */}
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <span 
               className="stamp" 
               style={{ color: '#DB2777', cursor: 'pointer' }}
-              onMouseEnter={() => setDateSpotHovered(true)}
-              onMouseLeave={() => setDateSpotHovered(false)}
+              onMouseEnter={() => setHoveredStamp('date')}
+              onMouseLeave={() => setHoveredStamp(null)}
             >
-              <span>🥟🌯</span> {dateSpotCount} date-tested
+              <span>💕</span> {dateSpotCount} date-tested
             </span>
-            
-            {/* Easter egg - handwritten style, appears on hover */}
-            {dateSpotHovered && (
+            {hoveredStamp === 'date' && (
               <p 
                 className="handwritten fade-in"
                 style={{
@@ -403,7 +454,7 @@ export default function App() {
                   zIndex: 10,
                 }}
               >
-                psst... momo & burrito approved 💕
+                momo & burrito approved 💕
               </p>
             )}
           </div>
@@ -543,11 +594,11 @@ export default function App() {
                 {spot.isDateSpot && (
                   <div style={{ position: 'relative' }}>
                     <div 
-                      className="badge badge-pink"
+                      className="badge badge-date"
                       onMouseEnter={() => setActiveTooltip(`date-${spot.id}`)}
                       onMouseLeave={() => setActiveTooltip(null)}
                     >
-                      🥟🌯
+                      💕
                     </div>
                     {activeTooltip === `date-${spot.id}` && (
                       <p 
@@ -662,15 +713,6 @@ export default function App() {
               textUnderlineOffset: 3,
             }}>
               Twitter
-            </a>
-            {' · '}
-            Part of{' '}
-            <a href="#" style={{ 
-              color: '#1C1917', 
-              textDecoration: 'underline',
-              textUnderlineOffset: 3,
-            }}>
-              rinkesh.co
             </a>
           </p>
           
