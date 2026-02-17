@@ -226,10 +226,10 @@ export default function App() {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          padding: 6px 14px;
+          padding: 6px 12px;
           border: 2px solid currentColor;
           border-radius: 6px;
-          font-size: 12px;
+          font-size: 11px;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -237,17 +237,29 @@ export default function App() {
           cursor: default;
           position: relative;
         }
+        @media (min-width: 540px) {
+          .stamp {
+            padding: 6px 14px;
+            font-size: 12px;
+          }
+        }
         
         .filter-btn {
-          padding: 10px 16px;
+          padding: 8px 14px;
           border-radius: 100px;
           border: none;
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s ease;
           white-space: nowrap;
           font-family: inherit;
+        }
+        @media (min-width: 540px) {
+          .filter-btn {
+            padding: 10px 16px;
+            font-size: 14px;
+          }
         }
         @media (hover: hover) {
           .filter-btn:hover {
@@ -263,15 +275,22 @@ export default function App() {
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
           border-radius: 50px;
-          width: 40px;
-          height: 40px;
+          width: 36px;
+          height: 36px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 16px;
+          font-size: 14px;
           box-shadow: 0 2px 8px rgba(0,0,0,0.2);
           cursor: pointer;
           transition: transform 0.2s ease;
+        }
+        @media (min-width: 540px) {
+          .badge {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+          }
         }
         @media (hover: hover) {
           .badge:hover {
@@ -287,18 +306,19 @@ export default function App() {
         
         .grid {
           display: grid;
-          gap: 20px;
+          gap: 16px;
           grid-template-columns: 1fr;
         }
-        @media (min-width: 540px) {
+        @media (min-width: 480px) {
           .grid { 
             grid-template-columns: repeat(2, 1fr); 
-            gap: 24px;
+            gap: 20px;
           }
         }
         @media (min-width: 900px) {
           .grid { 
-            grid-template-columns: repeat(3, 1fr); 
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
           }
         }
         
@@ -318,16 +338,28 @@ export default function App() {
           display: flex;
           gap: 8px;
           overflow-x: auto;
-          padding-bottom: 12px;
+          padding-bottom: 4px;
+          margin-left: -16px;
+          margin-right: -16px;
+          padding-left: 16px;
+          padding-right: 16px;
           -webkit-overflow-scrolling: touch;
           scrollbar-width: none;
+        }
+        @media (min-width: 540px) {
+          .filter-scroll {
+            margin-left: 0;
+            margin-right: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
         }
         .filter-scroll::-webkit-scrollbar {
           display: none;
         }
         
         .img-container {
-          height: 200px;
+          height: 180px;
           position: relative;
           background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%);
           border-radius: 16px 16px 0 0;
@@ -335,34 +367,90 @@ export default function App() {
         }
         @media (min-width: 540px) {
           .img-container {
+            height: 200px;
+          }
+        }
+        @media (min-width: 900px) {
+          .img-container {
             height: 180px;
+          }
+        }
+        
+        /* Mobile touch for tooltips */
+        @media (hover: none) {
+          .stamp {
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
           }
         }
       `}</style>
 
       {/* Header */}
-      <header className="container" style={{ paddingTop: 48, paddingBottom: 32 }}>
-        <div className="fade-up" style={{ marginBottom: 24, animationDelay: '0.05s' }}>
+      <header className="container" style={{ paddingTop: 40, paddingBottom: 24 }}>
+        <div className="fade-up" style={{ marginBottom: 20, animationDelay: '0.05s' }}>
           <h1 className="serif" style={{
-            fontSize: 'clamp(32px, 7vw, 52px)',
+            fontSize: 'clamp(28px, 7vw, 52px)',
             fontWeight: 600,
             color: '#1C1917',
             lineHeight: 1.15,
-            marginBottom: 8,
+            marginBottom: 6,
           }}>
             Places I'd take you
             <span className="float" style={{ 
               display: 'inline-block', 
-              marginLeft: 12,
+              marginLeft: 10,
               fontSize: '0.65em',
             }}>🍜</span>
           </h1>
           <p className="handwritten" style={{
-            fontSize: 'clamp(20px, 4vw, 26px)',
+            fontSize: 'clamp(18px, 4vw, 26px)',
             color: '#78716C',
           }}>
             if we were grabbing food in Bangalore
           </p>
+        </div>
+
+        {/* Personal intro */}
+        <div className="fade-up" style={{ 
+          display: 'flex',
+          alignItems: 'center',
+          gap: 14,
+          marginBottom: 28,
+          animationDelay: '0.08s',
+        }}>
+          <div style={{
+            width: 52,
+            height: 52,
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #1C1917 0%, #57534E 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#FFFBF5',
+            fontSize: 20,
+            fontWeight: 600,
+            flexShrink: 0,
+          }}>
+            R
+          </div>
+          <div>
+            <p style={{
+              fontSize: 15,
+              fontWeight: 600,
+              color: '#1C1917',
+              marginBottom: 2,
+            }}>
+              Rinkesh
+            </p>
+            <p style={{
+              fontSize: 13,
+              color: '#78716C',
+              lineHeight: 1.4,
+            }}>
+              Building things, eating everywhere.<br/>
+              Based in Bangalore with my cat Simba.
+            </p>
+          </div>
         </div>
 
         {/* Stats with hover easter eggs */}
@@ -371,9 +459,9 @@ export default function App() {
           flexWrap: 'wrap',
           alignItems: 'flex-start',
           gap: 10,
-          marginBottom: 24,
+          marginBottom: hoveredStamp ? 8 : 24,
           animationDelay: '0.1s',
-          minHeight: 70,
+          transition: 'margin-bottom 0.2s ease',
         }}>
           {/* Spots count */}
           <div style={{ position: 'relative', display: 'inline-block' }}>
@@ -460,13 +548,19 @@ export default function App() {
           </div>
         </div>
 
+        {/* Spacer that only appears on hover */}
+        <div style={{ 
+          height: hoveredStamp ? 32 : 0, 
+          transition: 'height 0.2s ease',
+        }} />
+
         {/* Intro */}
         <div className="fade-up" style={{ 
           maxWidth: 540, 
           animationDelay: '0.15s',
         }}>
           <p style={{
-            fontSize: 16,
+            fontSize: 'clamp(14px, 3.5vw, 16px)',
             lineHeight: 1.7,
             color: '#57534E',
           }}>
@@ -474,9 +568,9 @@ export default function App() {
             with honest notes about what to order.
           </p>
           <p style={{
-            fontSize: 14,
+            fontSize: 'clamp(12px, 3vw, 14px)',
             color: '#A8A29E',
-            marginTop: 10,
+            marginTop: 8,
           }}>
             Mostly South Bangalore because that's where I live and traffic is real.
           </p>
@@ -485,7 +579,7 @@ export default function App() {
 
       {/* Filters */}
       <section className="container fade-up" style={{ 
-        marginBottom: 32,
+        marginBottom: 24,
         animationDelay: '0.2s',
       }}>
         <div className="filter-scroll">
@@ -502,15 +596,15 @@ export default function App() {
                   : '0 2px 8px rgba(0,0,0,0.06)',
               }}
             >
-              <span style={{ marginRight: 6 }}>{filter.emoji}</span>
+              <span style={{ marginRight: 5 }}>{filter.emoji}</span>
               {filter.label}
             </button>
           ))}
         </div>
         
         <p style={{
-          marginTop: 16,
-          fontSize: 14,
+          marginTop: 12,
+          fontSize: 'clamp(12px, 3vw, 14px)',
           color: '#A8A29E',
         }}>
           {filteredSpots.length} {filteredSpots.length === 1 ? 'spot' : 'spots'}
@@ -519,7 +613,7 @@ export default function App() {
       </section>
 
       {/* Grid */}
-      <section className="container" style={{ paddingBottom: 64 }}>
+      <section className="container" style={{ paddingBottom: 48 }}>
         <div className="grid">
           {filteredSpots.map((spot, index) => (
             <article
@@ -563,6 +657,10 @@ export default function App() {
                       className="badge"
                       onMouseEnter={() => setActiveTooltip(`fav-${spot.id}`)}
                       onMouseLeave={() => setActiveTooltip(null)}
+                      onTouchStart={() => {
+                        setActiveTooltip(`fav-${spot.id}`);
+                        setTimeout(() => setActiveTooltip(null), 2000);
+                      }}
                     >
                       ⭐
                     </div>
@@ -573,19 +671,19 @@ export default function App() {
                           position: 'absolute',
                           top: 'calc(100% + 8px)',
                           right: 0,
-                          fontSize: 18,
+                          fontSize: 'clamp(15px, 4vw, 18px)',
                           color: '#DC2626',
                           whiteSpace: 'nowrap',
                           zIndex: 100,
                           background: '#FFFBF5',
-                          padding: '6px 12px',
+                          padding: '5px 10px',
                           borderRadius: 8,
                           border: '2px dashed #FCA5A5',
                           transform: 'rotate(-1deg)',
                           boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                         }}
                       >
-                        one of my absolute favorites!
+                        one of my favorites!
                       </p>
                     )}
                   </div>
@@ -597,6 +695,10 @@ export default function App() {
                       className="badge badge-date"
                       onMouseEnter={() => setActiveTooltip(`date-${spot.id}`)}
                       onMouseLeave={() => setActiveTooltip(null)}
+                      onTouchStart={() => {
+                        setActiveTooltip(`date-${spot.id}`);
+                        setTimeout(() => setActiveTooltip(null), 2000);
+                      }}
                     >
                       💕
                     </div>
@@ -607,12 +709,12 @@ export default function App() {
                           position: 'absolute',
                           top: 'calc(100% + 8px)',
                           right: 0,
-                          fontSize: 18,
+                          fontSize: 'clamp(15px, 4vw, 18px)',
                           color: '#DB2777',
                           whiteSpace: 'nowrap',
                           zIndex: 100,
                           background: '#FDF2F8',
-                          padding: '6px 12px',
+                          padding: '5px 10px',
                           borderRadius: 8,
                           border: '2px dashed #F9A8D4',
                           transform: 'rotate(1deg)',
@@ -626,18 +728,18 @@ export default function App() {
                 )}
               </div>
 
-              <div style={{ padding: 20 }}>
-                <div style={{ marginBottom: 8 }}>
+              <div style={{ padding: '16px' }}>
+                <div style={{ marginBottom: 6 }}>
                   <h3 className="serif" style={{
-                    fontSize: 19,
+                    fontSize: 'clamp(17px, 4vw, 19px)',
                     fontWeight: 600,
                     color: '#1C1917',
-                    marginBottom: 4,
+                    marginBottom: 3,
                   }}>
                     {spot.name}
                   </h3>
                   <p style={{
-                    fontSize: 13,
+                    fontSize: 'clamp(12px, 3vw, 13px)',
                     color: '#78716C',
                   }}>
                     {spot.area}
@@ -647,27 +749,27 @@ export default function App() {
                 <div style={{
                   display: 'inline-block',
                   background: '#FEF3C7',
-                  padding: '4px 10px',
+                  padding: '3px 8px',
                   borderRadius: 6,
-                  fontSize: 12,
+                  fontSize: 'clamp(10px, 2.5vw, 12px)',
                   fontWeight: 600,
                   color: '#92400E',
-                  marginBottom: 12,
+                  marginBottom: 10,
                 }}>
                   Order: {spot.what}
                 </div>
 
                 <p className="handwritten" style={{
-                  fontSize: 20,
+                  fontSize: 'clamp(18px, 4.5vw, 20px)',
                   color: '#EA580C',
-                  marginBottom: 10,
+                  marginBottom: 8,
                 }}>
                   "{spot.vibe}"
                 </p>
 
                 <p style={{
-                  fontSize: 14,
-                  lineHeight: 1.65,
+                  fontSize: 'clamp(13px, 3vw, 14px)',
+                  lineHeight: 1.6,
                   color: '#57534E',
                 }}>
                   {spot.note}
@@ -695,17 +797,17 @@ export default function App() {
       {/* Footer */}
       <footer style={{
         borderTop: '2px dashed #E7E5E4',
-        padding: '40px 0',
+        padding: '32px 0',
       }}>
         <div className="container" style={{ textAlign: 'center' }}>
           <p className="handwritten" style={{
-            fontSize: 22,
+            fontSize: 'clamp(18px, 5vw, 22px)',
             color: '#78716C',
-            marginBottom: 12,
+            marginBottom: 10,
           }}>
             Got a spot I should try?
           </p>
-          <p style={{ fontSize: 14, color: '#A8A29E' }}>
+          <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: '#A8A29E' }}>
             DM me on{' '}
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={{ 
               color: '#1C1917', 
@@ -717,8 +819,8 @@ export default function App() {
           </p>
           
           <p style={{
-            marginTop: 32,
-            fontSize: 12,
+            marginTop: 24,
+            fontSize: 11,
             color: '#D6D3D1',
           }}>
             last updated after a food coma
