@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NO ZERO DAYS — Five Editions</title>
+<style>
+  :root{
+    --paper:#e9e6df;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#1b1b1a;color:#16150f;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+  .gallery{max-width:1240px;margin:0 auto;padding:70px 28px 120px;}
+  .gallery-head{color:#d8d4c8;text-align:center;margin-bottom:64px;}
+  .gallery-head h1{font-size:13px;letter-spacing:.55em;font-weight:600;text-transform:uppercase;}
+  .gallery-head p{font-size:11px;letter-spacing:.32em;color:#7f7c70;margin-top:14px;text-transform:uppercase;}
+
+  .plate{margin-bottom:96px;}
+  .caption{display:flex;justify-content:space-between;align-items:baseline;color:#b7b3a6;
+    border-top:1px solid #3a3933;padding-top:14px;margin-top:22px;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;}
+  .caption .nm{color:#e9e6df;}
+  .caption .rt{color:#76736a;}
+
+  /* The poster sheet — fixed landscape, scales with container queries */
+  .poster{
+    position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;
+    container-type:inline-size;
+    box-shadow:0 40px 80px -30px rgba(0,0,0,.7),0 6px 18px rgba(0,0,0,.4);
+  }
+
+  /* ============ 01 · SWISS MUSEUM ============ */
+  .p01{background:#f3f1ec;color:#111;}
+  .p01 .grid{position:absolute;inset:0;display:grid;
+    grid-template-columns:repeat(12,1fr);}
+  .p01 .grid span{border-left:1px solid rgba(0,0,0,.045);}
+  .p01 .pad{position:absolute;inset:6.5cqw 7cqw;}
+  .p01 .topbar{display:flex;justify-content:space-between;font-size:1.35cqw;
+    letter-spacing:.34em;text-transform:uppercase;font-weight:600;}
+  .p01 .topbar .red{color:#e2231a;}
+  .p01 .stack{position:absolute;left:7cqw;bottom:6.5cqw;line-height:.84;}
+  .p01 .ghost{font-weight:800;font-size:9.2cqw;letter-spacing:-.02em;color:rgba(17,17,17,.07);text-transform:uppercase;}
+  .p01 .ghost:nth-child(2){color:rgba(17,17,17,.13);}
+  .p01 .ghost:nth-child(3){color:rgba(17,17,17,.22);}
+  .p01 .solid{font-weight:800;font-size:9.2cqw;letter-spacing:-.02em;text-transform:uppercase;}
+  .p01 .solid em{font-style:normal;color:#e2231a;}
+  .p01 .ed{position:absolute;right:7cqw;bottom:6.7cqw;text-align:right;font-size:1.25cqw;
+    letter-spacing:.3em;text-transform:uppercase;color:#555;line-height:2;}
+
+  /* ============ 02 · JAPANESE MINIMALISM ============ */
+  .p02{background:#f4f1e9;color:#26241e;}
+  .p02::before{content:"";position:absolute;inset:0;opacity:.5;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='0.4'/></svg>");}
+  .p02 .line{position:absolute;left:11cqw;right:11cqw;top:50%;height:1px;background:#26241e;opacity:.85;}
+  .p02 .dot{position:absolute;left:50%;top:50%;width:1.1cqw;height:1.1cqw;border-radius:50%;
+    background:#c8442f;transform:translate(-50%,-50%);}
+  .p02 .ttl{position:absolute;left:11cqw;top:calc(50% - 5.6cqw);font-weight:300;
+    font-size:2.1cqw;letter-spacing:.62em;text-transform:uppercase;color:#26241e;}
+  .p02 .sub{position:absolute;left:11cqw;top:calc(50% + 3.4cqw);font-weight:300;
+    font-size:1.05cqw;letter-spacing:.5em;text-transform:uppercase;color:#8c887c;}
+  .p02 .han{position:absolute;right:11cqw;bottom:9cqw;writing-mode:vertical-rl;
+    font-size:1.05cqw;letter-spacing:.45em;color:#b6b1a3;}
+
+  /* ============ 03 · EXPERIMENTAL TYPOGRAPHY ============ */
+  .p03{background:#0a0a0a;color:#f2f2f2;overflow:hidden;}
+  .p03 .echo{position:absolute;left:-4cqw;top:14cqw;font-weight:900;font-size:34cqw;
+    line-height:.7;letter-spacing:-.05em;color:#1c1c1c;text-transform:uppercase;white-space:nowrap;}
+  .p03 .echo.b{left:-2cqw;color:#2a2a2a;}
+  .p03 .zero{position:absolute;right:-9cqw;top:-9cqw;font-weight:900;font-size:64cqw;
+    line-height:1;color:#f23005;mix-blend-mode:normal;}
+  .p03 .word{position:absolute;left:5cqw;top:9cqw;font-weight:900;font-size:13cqw;
+    line-height:.78;letter-spacing:-.04em;text-transform:uppercase;}
+  .p03 .word .o{color:#f23005;}
+  .p03 .word .slash{display:block;font-weight:300;font-size:2.6cqw;letter-spacing:.04em;
+    margin-top:1.6cqw;color:#7a7a7a;}
+  .p03 .strip{position:absolute;left:0;bottom:6.5cqw;width:100%;
+    font-size:1.5cqw;letter-spacing:.5em;text-transform:uppercase;color:#f2f2f2;
+    mix-blend-mode:difference;white-space:nowrap;overflow:hidden;}
+  .p03 .tag{position:absolute;right:5cqw;bottom:4cqw;font-size:1.2cqw;letter-spacing:.34em;color:#555;text-transform:uppercase;}
+
+  /* ============ 04 · VINTAGE MODERNIST ============ */
+  .p04{background:#e7ddc7;color:#23201a;}
+  .p04 .ink{position:absolute;inset:0;mix-blend-mode:multiply;}
+  .p04 .c1{position:absolute;width:46cqw;height:46cqw;border-radius:50%;background:#0f5a52;opacity:.9;
+    left:8cqw;top:30cqw;mix-blend-mode:multiply;}
+  .p04 .c2{position:absolute;width:36cqw;height:36cqw;border-radius:50%;background:#c8531f;opacity:.9;
+    left:24cqw;top:18cqw;mix-blend-mode:multiply;}
+  .p04 .c3{position:absolute;width:26cqw;height:26cqw;border-radius:50%;background:#e0a417;opacity:.95;
+    left:38cqw;top:8cqw;mix-blend-mode:multiply;}
+  .p04 .grain{position:absolute;inset:0;opacity:.22;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100' height='100' filter='url(%23g)'/></svg>");}
+  .p04 .bar{position:absolute;left:8cqw;top:8cqw;width:3cqw;height:14cqw;background:#23201a;}
+  .p04 .ttl{position:absolute;left:8cqw;bottom:8cqw;font-family:"Futura","Century Gothic","Trebuchet MS",sans-serif;
+    font-weight:700;font-size:7.4cqw;line-height:.92;letter-spacing:.01em;text-transform:uppercase;color:#23201a;}
+  .p04 .meta{position:absolute;right:8cqw;bottom:8.6cqw;text-align:right;
+    font-family:"Futura","Century Gothic",sans-serif;font-size:1.3cqw;letter-spacing:.34em;
+    text-transform:uppercase;color:#23201a;line-height:2.1;}
+
+  /* ============ 05 · EDITORIAL COVER ============ */
+  .p05{background:#ece7df;color:#1d1b16;font-family:"Optima","Palatino Linotype",Georgia,serif;}
+  .p05 .frame{position:absolute;inset:4.6cqw;}
+  .p05 .masthead{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:1px solid #1d1b16;padding-bottom:1.4cqw;
+    font-family:"Helvetica Neue",sans-serif;font-size:1.15cqw;letter-spacing:.42em;text-transform:uppercase;}
+  .p05 .masthead .vol{color:#9a3b2e;}
+  .p05 .center{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;}
+  .p05 .kick{font-family:"Helvetica Neue",sans-serif;font-size:1.1cqw;letter-spacing:.5em;
+    text-transform:uppercase;color:#8a8678;margin-bottom:2.6cqw;}
+  .p05 .cover{font-family:"Didot","Bodoni MT","Didot LT STD",Georgia,serif;
+    font-weight:400;font-size:8.4cqw;line-height:.96;letter-spacing:.005em;}
+  .p05 .cover em{font-style:italic;color:#9a3b2e;}
+  .p05 .rule{width:9cqw;height:1px;background:#1d1b16;margin:2.8cqw auto 0;}
+  .p05 .dek{font-family:"Helvetica Neue",sans-serif;font-size:1cqw;letter-spacing:.34em;
+    text-transform:uppercase;color:#8a8678;margin-top:2.4cqw;}
+  .p05 .folio{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;
+    font-family:"Helvetica Neue",sans-serif;font-size:1.05cqw;letter-spacing:.34em;text-transform:uppercase;color:#56534a;}
+</style>
+</head>
+<body>
+<div class="gallery">
+  <div class="gallery-head">
+    <h1>NO ZERO DAYS</h1>
+    <p>Five Editions · A Collectible Print Series</p>
+  </div>
+
+  <!-- 01 -->
+  <div class="plate">
+    <div class="poster p01">
+      <div class="grid">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="pad">
+        <div class="topbar">
+          <span>Kunsthalle / Edition 01</span>
+          <span class="red">●&nbsp;&nbsp;Continuum</span>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="ghost">No Zero Days</div>
+        <div class="ghost">No Zero Days</div>
+        <div class="ghost">No Zero Days</div>
+        <div class="solid">No&nbsp;Zer<em>o</em>&nbsp;Days</div>
+      </div>
+      <div class="ed">Zürich<br>1957 — ∞<br>Plate&nbsp;A</div>
+    </div>
+    <div class="caption"><span class="nm">01 · Swiss Museum</span><span class="rt">Akzidenz / 12-col grid / international red</span></div>
+  </div>
+
+  <!-- 02 -->
+  <div class="plate">
+    <div class="poster p02">
+      <div class="line"></div>
+      <div class="dot"></div>
+      <div class="ttl">No&nbsp;Zero&nbsp;Days</div>
+      <div class="sub">an unbroken line</div>
+      <div class="han">続 — keep going</div>
+    </div>
+    <div class="caption"><span class="nm">02 · Japanese Minimalism</span><span class="rt">Negative space / hairline continuity / vermilion</span></div>
+  </div>
+
+  <!-- 03 -->
+  <div class="plate">
+    <div class="poster p03">
+      <div class="echo">ZERO</div>
+      <div class="echo b">ZERO</div>
+      <div class="zero">0</div>
+      <div class="word">N<span class="o">O</span><br>ZER<span class="o">O</span><br>DAYS
+        <span class="slash">/ momentum is a streak, not a sprint</span>
+      </div>
+      <div class="strip">NO ZERO DAYS · NO ZERO DAYS · NO ZERO DAYS · NO ZERO DAYS · NO ZERO DAYS · NO ZERO DAYS</div>
+      <div class="tag">Type Specimen №3</div>
+    </div>
+    <div class="caption"><span class="nm">03 · Experimental Typography</span><span class="rt">Crop / layer / displacement / signal red</span></div>
+  </div>
+
+  <!-- 04 -->
+  <div class="plate">
+    <div class="poster p04">
+      <div class="bar"></div>
+      <div class="c1"></div>
+      <div class="c2"></div>
+      <div class="c3"></div>
+      <div class="grain"></div>
+      <div class="ttl">No<br>Zero<br>Days</div>
+      <div class="meta">Screen Print<br>3 Colours<br>Edition&nbsp;of&nbsp;100</div>
+    </div>
+    <div class="caption"><span class="nm">04 · Vintage Modernist</span><span class="rt">Bauhaus geometry / overprint / Futura</span></div>
+  </div>
+
+  <!-- 05 -->
+  <div class="plate">
+    <div class="poster p05">
+      <div class="frame">
+        <div class="masthead">
+          <span>The Quiet Discipline</span>
+          <span class="vol">Vol. 09 · Compounding</span>
+        </div>
+        <div class="center">
+          <div class="kick">On the practice of showing up</div>
+          <div class="cover">No&nbsp;<em>Zero</em><br>Days</div>
+          <div class="rule"></div>
+          <div class="dek">Small, daily, inevitable</div>
+        </div>
+        <div class="folio">
+          <span>Issue No. 09</span>
+          <span>Printed Matter</span>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><span class="nm">05 · Editorial Cover</span><span class="rt">Didone / luxury margins / muted oxblood</span></div>
+  </div>
+
+</div>
+</body>
+</html>
